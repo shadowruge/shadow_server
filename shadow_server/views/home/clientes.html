@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes</title>
+</head>
+<body>
+    <h1>Clientes</h1>
+    <ul id="clientes-list"></ul>
+
+    <script>
+       
+            // Fazendo uma requisição GET para obter os dados dos clientes
+            fetch('/clientes')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao buscar os dados dos clientes');
+                    }
+                    return response.json();
+                })
+                .then(clientes => {
+                    // Após obter os dados dos clientes, adiciona-os à lista na página HTML
+                    const clientesList = document.getElementById('clientes-list');
+                    clientes.forEach(cliente => {
+                        const li = document.createElement('li');
+                        li.textContent = `Id: ${cliente.id}, Nome: ${cliente.nome}, Email: ${cliente.email}`;
+                        clientesList.appendChild(li);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar clientes:', error);
+                });
+        </script>
+        
+ 
+</body>
+</html>
