@@ -16,32 +16,5 @@
     "phonenumber": "987654321",
     "cep": "54321-876",
     "estado": "RJ"
-  },
-  {
-    "id": 3,
-    "firstname": "ana paula",
-    "lastname": "chapouto de santana",
-    "email": "joiarara7k@gmail.com",
-    "phonenumber": "21973917490",
-    "cep": "21370260",
-    "estado": "RJ"
-  },
-  {
-    "id": 4,
-    "firstname": "andrey luiz",
-    "lastname": "chapouto valladares",
-    "email": "joiarara7k@gmail.com",
-    "phonenumber": "21973917490",
-    "cep": "21370260",
-    "estado": "RJ"
-  },
-  {
-    "id": 5,
-    "firstname": "andrey luiz",
-    "lastname": "chapouto valladares",
-    "email": "joiarara7k@gmail.com",
-    "phonenumber": "21973917490",
-    "cep": "21370260",
-    "estado": "RJ"
   }
 ]
