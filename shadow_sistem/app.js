@@ -10,16 +10,27 @@ const clientesFilePath = path.join(__dirname, 'data', 'clientes.json');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Verificar se o arquivo JSON de clientes existe, se não existir, criar um novo
-if (!fs.existsSync(clientesFilePath)) {
-    fs.writeFileSync(clientesFilePath, '[]', 'utf8', (err) => {
-        if (err) {
-            console.error('Erro ao criar o arquivo JSON de clientes:', err);
-        } else {
-            console.log('Arquivo JSON de clientes criado com sucesso.');
-        }
-    });
-}
+// Rota para servir o arquivo index.html na pasta public
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/cadastroclientes.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'cadastroclientes.html'));
+});
+
+app.get('/viewclientes.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'viewclientes.html'));
+});
+
+app.get('/cadastroprodutos.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'cadastroprodutos.html'));
+});
+
+app.get('/viewprodutos.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'viewprodutos.html'));
+});
+
 
 // Rota para visualizar o arquivo JSON de clientes
 app.get('/data/clientes.json', (req, res) => {
