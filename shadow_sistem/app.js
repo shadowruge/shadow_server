@@ -79,34 +79,43 @@ app.post('/data/clientes.json', (req, res) => {
 });
 
 //Area para produtos
-
-// Rota para visualizar o arquivo JSON de Produtos
+// Rota para visualizar o arquivo JSON de produtos
 app.get('/data/produtos.json', (req, res) => {
-    fs.readFile(clientesFilePath, 'utf8', (err, data) => {
+    fs.readFile(produtosFilePath, 'utf8', (err, data) => {
         if (err) {
             console.error('Erro ao ler o arquivo JSON de produtos:', err);
             return res.status(500).send('Erro ao ler o arquivo JSON de produtos');
         }
-        res.json(JSON.parse(data));
+
+        // Verifica se o arquivo está vazio
+        if (data.trim() === '') {
+            // Inicializa o arquivo com um array vazio
+            data = '[]';
+        }
+
+        // Parseia o JSON
+        const produtos = JSON.parse(data);
+        res.json(produtos);
     });
 });
 
-// Rota para adicionar um novo Produtos
+
+// Rota para adicionar um novo produto
 app.post('/data/produtos.json', (req, res) => {
     // Verifique o conteúdo de req.body para garantir que os dados do formulário estejam sendo recebidos corretamente
     console.log('Dados do formulário:', req.body);
 
     fs.readFile(produtosFilePath, 'utf8', (err, data) => {
         if (err) {
-            console.error('Erro ao ler o arquivo JSON de clientes:', err);
-            return res.status(500).send('Erro ao ler o arquivo JSON de clientes');
+            console.error('Erro ao ler o arquivo JSON de produtos:', err);
+            return res.status(500).send('Erro ao ler o arquivo JSON de produtos');
         }
 
         try {
             const produtos = JSON.parse(data);
             const newProduto = {
-                id: produtos.length + 1, // Gerando um novo ID para o cliente
-                ...req.body // Adicionando os dados do formulário ao novo cliente
+                id: produtos.length + 1, // Gerando um novo ID para o produto
+                ...req.body // Adicionando os dados do formulário ao novo produto
             };
 
             produtos.push(newProduto);
@@ -125,6 +134,7 @@ app.post('/data/produtos.json', (req, res) => {
         }
     });
 });
+
 
 // Inicializando o servidor
 app.listen(PORT, () => {

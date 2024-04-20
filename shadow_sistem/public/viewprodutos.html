@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-    
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <link rel="shortcut icon" href="/" type="image/x-icon">
@@ -8,7 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Cliente</title>
+    <title>Visualizar Produtos</title>
     <style>
         *{
             margin-left: 10px;
@@ -22,11 +21,69 @@
         li{
             list-style-type: none;
         }
+
+
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
     </style>
 </head>
-
 <body>
-    <h1>Página de Edição</h1>
-    <p>Esta é a página de edição.</p>
+    <h1>Visualizar Produtos</h1>
+   
+    <table id="produtos-table">
+        <thead>
+            <tr>
+                <th>Nome do Produto</th>
+                <th>Vendedor</th>
+                <th>Email</th>
+                <th>Telefone</th>
+                <th>Valor Unitário</th>
+                <th>Quantidade</th>
+                <th>CEP</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody id="produtos-list"></tbody>
+    </table>
+
+    <script>
+        // Fazendo uma requisição para obter os dados dos produtos
+        fetch('/data/produtos.json')
+            .then(response => response.json())
+            .then(data => {
+                // Renderizando a lista de produtos na tabela
+                const produtosList = document.getElementById('produtos-list');
+                data.forEach(produto => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${produto.firstname}</td>
+                        <td>${produto.lastname}</td>
+                        <td>${produto.email}</td>
+                        <td>${produto.phonenumber}</td>
+                        <td>${produto.valor}</td>
+                        <td>${produto.quantidade}</td>
+                        <td>${produto.cep}</td>
+                        <td>${produto.estado}</td>
+                    `;
+                    produtosList.appendChild(tr);
+                });
+            })
+            .catch(error => {
+                console.error('Erro ao carregar os dados dos produtos:', error);
+            });
+    </script>
 </body>
 </html>
