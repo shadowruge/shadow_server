@@ -6,6 +6,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const clientesFilePath = path.join(__dirname, 'data', 'clientes.json');
 const produtosFilePath = path.join(__dirname, 'data', 'produtos.json');
+const cobrancasFilePath = path.join(__dirname, 'data', 'cobrancas.json');
 // Middleware para analisar o corpo da solicitação
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -29,6 +30,61 @@ app.get('/cadastroprodutos.html', (req, res) => {
 
 app.get('/viewprodutos.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'viewprodutos.html'));
+});
+
+
+
+// Rota para servir a página de cadastro de cobranças
+app.get('/cadastracobrancas.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'cadastracobrancas.html'));
+});
+
+// Rota para servir a página de visualização de cobranças
+app.get('/viewcobrancas.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'viewcobrancas.html'));
+});
+
+// Rota para visualizar o arquivo JSON de cobranças
+app.get('/data/cobrancas.json', (req, res) => {
+    fs.readFile(cobrancasFilePath, 'utf8', (err, data) => {
+        if (err) {
+            console.error('Erro ao ler o arquivo JSON de cobranças:', err);
+            return res.status(500).send('Erro ao ler o arquivo JSON de cobranças');
+        }
+        res.json(JSON.parse(data));
+    });
+});
+
+// Rota para adicionar uma nova cobrança
+app.post('/data/cobrancas.json', (req, res) => {
+    fs.readFile(cobrancasFilePath, 'utf8', (err, data) => {
+        if (err) {
+            console.error('Erro ao ler o arquivo JSON de cobranças:', err);
+            return res.status(500).send('Erro ao ler o arquivo JSON de cobranças');
+        }
+
+        try {
+            const cobrancas = JSON.parse(data);
+            const newCobranca = {
+                id: cobrancas.length + 1, // Gerando um novo ID para a cobrança
+                ...req.body // Adicionando os dados do formulário à nova cobrança
+            };
+
+            cobrancas.push(newCobranca);
+
+            fs.writeFile(cobrancasFilePath, JSON.stringify(cobrancas, null, 2), 'utf8', (err) => {
+                if (err) {
+                    console.error('Erro ao salvar o arquivo JSON de cobranças:', err);
+                    return res.status(500).send('Erro ao salvar o arquivo JSON de cobranças');
+                }
+                
+                res.json(newCobranca);
+            });
+        } catch (error) {
+            console.error(error);
+            return res.status(500).send('Erro ao analisar o JSON de cobranças');
+        }
+    });
 });
 
 

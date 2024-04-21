@@ -1,0 +1,43 @@
+[
+  {
+    "id": 1,
+    "cliente": "1",
+    "valor": "200",
+    "dataVencimento": "2024-04-30"
+  },
+  {
+    "id": 2,
+    "cliente": "1",
+    "valor": "200",
+    "dataVencimento": "2024-04-30"
+  },
+  {
+    "id": 3,
+    "cliente": "1",
+    "valor": "200",
+    "dataVencimento": "2024-04-30"
+  },
+  {
+    "id": 4,
+    "cliente": "1",
+    "valor": "200",
+    "dataVencimento": "2024-04-30"
+  },
+  {
+    "id": 5,
+    "cliente": "1",
+    "valor": "200",
+    "dataVencimento": "2024-04-30"
+  },
+  {
+    "id": 6,
+    "valor": "200",
+    "dataVencimento": "2024-04-30"
+  },
+  {
+    "id": 7,
+    "cliente": "undefined",
+    "valor": "200",
+    "dataVencimento": "2024-04-30"
+  }
+]
