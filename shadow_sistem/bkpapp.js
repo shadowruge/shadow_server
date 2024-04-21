@@ -9,51 +9,45 @@ const PORT = process.env.PORT || 3000;
 const clientesFilePath = path.join(__dirname, 'data', 'clientes.json');
 const produtosFilePath = path.join(__dirname, 'data', 'produtos.json');
 const cobrancasFilePath = path.join(__dirname, 'data', 'cobrancas.json');
-const postsFilePath = path.join(__dirname, 'data', 'post.json'); // Caminho para o novo arquivo JSON para os posts
-const publicPath = path.join(__dirname, 'public');
-
-// Verifica se o diretório para os arquivos JSON existe, se não, cria-o
-fs.mkdirSync(path.join(__dirname, 'data'), { recursive: true });
-
+// Middleware para analisar o corpo da solicitação
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Rotas para os arquivos HTML
+// Rota para servir o arquivo index.html na pasta public
 app.get('/', (req, res) => {
-    res.sendFile(path.join(publicPath, 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.get('/cadastroclientes.html', (req, res) => {
-    res.sendFile(path.join(publicPath, 'cadastroclientes.html'));
+    res.sendFile(path.join(__dirname, 'public', 'cadastroclientes.html'));
 });
 
 app.get('/viewclientes.html', (req, res) => {
-    res.sendFile(path.join(publicPath, 'viewclientes.html'));
+    res.sendFile(path.join(__dirname, 'public', 'viewclientes.html'));
 });
 
 app.get('/cadastroprodutos.html', (req, res) => {
-    res.sendFile(path.join(publicPath, 'cadastroprodutos.html'));
+    res.sendFile(path.join(__dirname, 'public', 'cadastroprodutos.html'));
 });
 
 app.get('/viewprodutos.html', (req, res) => {
-    res.sendFile(path.join(publicPath, 'viewprodutos.html'));
+    res.sendFile(path.join(__dirname, 'public', 'viewprodutos.html'));
 });
 
+
+
+// Rota para servir a página de cadastro de cobranças
 app.get('/cadastracobrancas.html', (req, res) => {
-    res.sendFile(path.join(publicPath, 'cadastracobrancas.html'));
+    res.sendFile(path.join(__dirname, 'public', 'cadastracobrancas.html'));
 });
 
+// Rota para servir a página de visualização de cobranças
 app.get('/viewcobrancas.html', (req, res) => {
-    res.sendFile(path.join(publicPath, 'viewcobrancas.html'));
+    res.sendFile(path.join(__dirname, 'public', 'viewcobrancas.html'));
 });
 
 app.get('/agenda.html', (req, res) => {
-    res.sendFile(path.join(publicPath, 'agenda.html'));
-});
-
-
-app.get('/viewagenda.html', (req, res) => {
-    res.sendFile(path.join(publicPath, 'viewagenda.html'));
+    res.sendFile(path.join(__dirname, 'public', 'agenda.html'));
 });
 
 // Rota para visualizar o arquivo JSON de cobranças
@@ -78,8 +72,8 @@ app.post('/data/cobrancas.json', (req, res) => {
         try {
             const cobrancas = JSON.parse(data);
             const newCobranca = {
-                id: cobrancas.length + 1,
-                ...req.body
+                id: cobrancas.length + 1, // Gerando um novo ID para a cobrança
+                ...req.body // Adicionando os dados do formulário à nova cobrança
             };
 
             cobrancas.push(newCobranca);
@@ -99,6 +93,7 @@ app.post('/data/cobrancas.json', (req, res) => {
     });
 });
 
+
 // Rota para visualizar o arquivo JSON de clientes
 app.get('/data/clientes.json', (req, res) => {
     fs.readFile(clientesFilePath, 'utf8', (err, data) => {
@@ -112,6 +107,7 @@ app.get('/data/clientes.json', (req, res) => {
 
 // Rota para adicionar um novo cliente
 app.post('/data/clientes.json', (req, res) => {
+    // Verifique o conteúdo de req.body para garantir que os dados do formulário estejam sendo recebidos corretamente
     console.log('Dados do formulário:', req.body);
 
     fs.readFile(clientesFilePath, 'utf8', (err, data) => {
@@ -123,8 +119,8 @@ app.post('/data/clientes.json', (req, res) => {
         try {
             const clientes = JSON.parse(data);
             const newClient = {
-                id: clientes.length + 1,
-                ...req.body
+                id: clientes.length + 1, // Gerando um novo ID para o cliente
+                ...req.body // Adicionando os dados do formulário ao novo cliente
             };
 
             clientes.push(newClient);
@@ -144,6 +140,7 @@ app.post('/data/clientes.json', (req, res) => {
     });
 });
 
+//Area para produtos
 // Rota para visualizar o arquivo JSON de produtos
 app.get('/data/produtos.json', (req, res) => {
     fs.readFile(produtosFilePath, 'utf8', (err, data) => {
@@ -152,34 +149,22 @@ app.get('/data/produtos.json', (req, res) => {
             return res.status(500).send('Erro ao ler o arquivo JSON de produtos');
         }
 
+        // Verifica se o arquivo está vazio
         if (data.trim() === '') {
+            // Inicializa o arquivo com um array vazio
             data = '[]';
         }
 
+        // Parseia o JSON
         const produtos = JSON.parse(data);
         res.json(produtos);
-    });
-});
-
-app.get('/data/post.json', (req, res) => {
-    fs.readFile(postsFilePath, 'utf8', (err, data) => {
-        if (err) {
-            console.error('Erro ao ler o arquivo JSON de posts:', err);
-            return res.status(500).send('Erro ao ler o arquivo JSON de posts');
-        }
-
-        if (data.trim() === '') {
-            data = '[]';
-        }
-
-        const posts = JSON.parse(data);
-        res.json(posts);
     });
 });
 
 
 // Rota para adicionar um novo produto
 app.post('/data/produtos.json', (req, res) => {
+    // Verifique o conteúdo de req.body para garantir que os dados do formulário estejam sendo recebidos corretamente
     console.log('Dados do formulário:', req.body);
 
     fs.readFile(produtosFilePath, 'utf8', (err, data) => {
@@ -191,8 +176,8 @@ app.post('/data/produtos.json', (req, res) => {
         try {
             const produtos = JSON.parse(data);
             const newProduto = {
-                id: produtos.length + 1,
-                ...req.body
+                id: produtos.length + 1, // Gerando um novo ID para o produto
+                ...req.body // Adicionando os dados do formulário ao novo produto
             };
 
             produtos.push(newProduto);
@@ -212,38 +197,12 @@ app.post('/data/produtos.json', (req, res) => {
     });
 });
 
-// Rota para adicionar um novo post
-app.post('/data/post.json', (req, res) => {
-    fs.readFile(postsFilePath, 'utf8', (err, data) => {
-        if (err) {
-            console.error('Erro ao ler o arquivo JSON de posts:', err);
-            return res.status(500).send('Erro ao ler o arquivo JSON de posts');
-        }
 
-        try {
-            const posts = JSON.parse(data);
-            const newPost = {
-                id: posts.length + 1,
-                title: req.body.title,
-                content: req.body.content
-            };
-
-            posts.push(newPost);
-
-            fs.writeFile(postsFilePath, JSON.stringify(posts, null, 2), 'utf8', (err) => {
-                if (err) {
-                    console.error('Erro ao salvar o arquivo JSON de posts:', err);
-                    return res.status(500).send('Erro ao salvar o arquivo JSON de posts');
-                }
-                
-                res.json(newPost);
-            });
-        } catch (error) {
-            console.error(error);
-            return res.status(500).send('Erro ao analisar o JSON de posts');
-        }
-    });
-});
+// Função para agendar um post
+function schedulePost(platform, content, date) {
+    console.log(`Agendando post para ${platform} em ${date}: ${content}`);
+    // Lógica para agendar o post na plataforma desejada
+}
 
 // Função para enviar notificação
 function scheduleNotification(date, message) {
@@ -251,14 +210,14 @@ function scheduleNotification(date, message) {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'zambelestar@gmail.com',
-            pass: 'izaias1976'
+            user: 'seuemail@gmail.com',
+            pass: 'suasenha'
         }
     });
     
     const mailOptions = {
-        from: 'zambelestar@gmail.com',
-        to: 'zambelestar@gmail.com',
+        from: 'seuemail@gmail.com',
+        to: 'seuemail@gmail.com',
         subject: 'Lembrete de Postagem',
         text: message
     };
@@ -273,7 +232,16 @@ function scheduleNotification(date, message) {
         });
     });
 }
-scheduleNotification()
+
+// Exemplo de uso
+schedulePost('Instagram', 'Conteúdo do post no Instagram', new Date('2024-04-20 12:00:00'));
+schedulePost('Facebook', 'Conteúdo do post no Facebook', new Date('2024-04-21 10:00:00'));
+
+scheduleNotification(new Date('2024-04-20 11:00:00'), 'Lembre-se de fazer o post no Instagram hoje!');
+
+
+
+
 // Inicializando o servidor
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
