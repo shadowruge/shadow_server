@@ -10,6 +10,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agenda de Posts</title>
     <style>
+        *{
+            margin-left: 10px;
+            
+        }
+        
+        body{
+            margin-top: 10px;
+        }
+
         .container {
             display: flex;
             flex-wrap: wrap;
@@ -40,10 +49,28 @@
         .card-content {
             font-size: 16px;
         }
+
+
+        li{
+            list-style-type: none;
+        }
     </style>
 </head>
 
 <body>
+
+    <ul>
+        <li><a href="/cadastroclientes.html">Cadastro de clientes</a></li>
+        <li><a href="/viewclientes.html">Clientes</a></li>
+        <li><a href="/cadastroprodutos.html">Cadastro de produtos</a></li>
+        <li><a href="/viewprodutos.html">Produtos</a></li>
+        <li><a href="/cadastracobrancas.html">Cadastro de cobranças</a></li>
+        <li><a href="/viewcobrancas.html">Cobracas</a></li>
+        <li><a href="/agenda.html">Agenda</a></li>
+        
+    </ul>
+
+
     <h1>Agenda de Posts</h1>
     <div class="container" id="post-container">
         <!-- Aqui serão adicionados os cards de post agendados -->
@@ -52,32 +79,38 @@
     <script>
         const postContainer = document.getElementById('post-container');
 
-        // Fazer uma requisição para obter os dados dos posts do arquivo JSON
-        fetch('/data/post.json')
-            .then(response => response.json())
-            .then(posts => {
-                // Renderizar os cards de post
-                posts.forEach(post => {
-                    const card = document.createElement('div');
-                    card.classList.add('card');
+// Fazer uma requisição para obter os dados dos posts do arquivo JSON
+fetch('/data/post.json')
+    .then(response => response.json())
+    .then(posts => {
+        // Renderizar os cards de post
+        posts.forEach(post => {
+            const card = document.createElement('div');
+            card.classList.add('card');
 
-                    const cardHeader = document.createElement('div');
-                    cardHeader.classList.add('card-header');
-                    cardHeader.textContent = post.title;
+            const cardHeader = document.createElement('div');
+            cardHeader.classList.add('card-header');
+            cardHeader.textContent = post.title;
 
-                    const cardContent = document.createElement('div');
-                    cardContent.classList.add('card-content');
-                    cardContent.textContent = post.content;
+            const cardContent = document.createElement('div');
+            cardContent.classList.add('card-content');
+            cardContent.textContent = post.content;
 
-                    card.appendChild(cardHeader);
-                    card.appendChild(cardContent);
+            const cardDateTimeLocal = document.createElement('div'); // Alterado de li para div
+            cardDateTimeLocal.classList.add('card-datetimelocal');
+            cardDateTimeLocal.textContent = post.datetimelocal; // Corrigido de cardContent para cardDateTimeLocal
 
-                    postContainer.appendChild(card);
-                });
-            })
-            .catch(error => {
-                console.error('Erro ao carregar os dados dos posts:', error);
-            });
+            card.appendChild(cardHeader);
+            card.appendChild(cardContent);
+            card.appendChild(cardDateTimeLocal); // Corrigido de carddatetimelocal para cardDateTimeLocal
+
+            postContainer.appendChild(card);
+        });
+    })
+    .catch(error => {
+        console.error('Erro ao carregar os dados dos posts:', error);
+    });
+
     </script>
 </body>
 

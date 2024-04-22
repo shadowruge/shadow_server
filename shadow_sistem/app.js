@@ -225,7 +225,8 @@ app.post('/data/post.json', (req, res) => {
             const newPost = {
                 id: posts.length + 1,
                 title: req.body.title,
-                content: req.body.content
+                content: req.body.content,
+                datetimelocal: req.body.datetimelocal
             };
 
             posts.push(newPost);
@@ -245,35 +246,8 @@ app.post('/data/post.json', (req, res) => {
     });
 });
 
-// Função para enviar notificação
-function scheduleNotification(date, message) {
-    console.log(`Agendando notificação para ${date}: ${message}`);
-    const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: 'zambelestar@gmail.com',
-            pass: 'izaias1976'
-        }
-    });
-    
-    const mailOptions = {
-        from: 'zambelestar@gmail.com',
-        to: 'zambelestar@gmail.com',
-        subject: 'Lembrete de Postagem',
-        text: message
-    };
-    
-    const job = schedule.scheduleJob(date, function(){
-        transporter.sendMail(mailOptions, function(error, info){
-            if (error) {
-                console.log(error);
-            } else {
-                console.log('Email enviado: ' + info.response);
-            }
-        });
-    });
-}
-scheduleNotification()
+
+
 // Inicializando o servidor
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
