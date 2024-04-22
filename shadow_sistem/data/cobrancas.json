@@ -39,5 +39,11 @@
     "cliente": "undefined",
     "valor": "200",
     "dataVencimento": "2024-04-30"
+  },
+  {
+    "id": 8,
+    "cliente": "undefined",
+    "valor": "150",
+    "dataVencimento": "2024-04-23"
   }
 ]
