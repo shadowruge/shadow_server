@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agenda - Cadastro de Posts</title>
 </head>
+<style>
+    #content{
+        width: 23rem;
+        height: 23rem;
+    }
+</style>
 <body>
     <h1>Cadastro de Post na Agenda</h1>
     <form id="postForm">
@@ -12,42 +18,45 @@
         <input type="text" id="title" name="title"><br>
         <label for="content">Conteúdo:</label><br>
         <textarea id="content" name="content"></textarea><br>
-        <label for="scheduledDate">Data de Agendamento:</label><br>
-        <input type="datetime-local" id="scheduledDate" name="scheduledDate"><br>
-        <input type="hidden" id="creationDate" name="creationDate"><br>
-        <button type="submit">Salvar Post</button>
+        <label for="datetimelocal">Data de postagem:</label><br>
+        <input type="datetime-local" id="datetimelocal" name="datetimelocal"><br>
+        <input type="hidden" id="createdDate" name="createdDate"> <!-- Hidden field for creation date -->
+        <input type="hidden" id="scheduledDate" name="scheduledDate"> <!-- Hidden field for scheduled date -->
+        <button type="button" onclick="salvarPost()">Salvar Post</button>
     </form>
 
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
-        const form = document.getElementById('postForm');
-        const creationDateInput = document.getElementById('creationDate');
-        const scheduledDateInput = document.getElementById('scheduledDate');
+        function salvarPost() {
+            const form = document.getElementById('postForm');
 
-        form.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const formData = new FormData(form);
-            const scheduledDate = scheduledDateInput.value; // Capturar a data de agendamento
-            const currentDate = new Date().toISOString(); // Capturar a data e hora atuais
+            // Capturando a data e hora de criação
+            const createdDate = new Date();
+            form.elements['createdDate'].value = createdDate.toISOString();
 
-            try {
-                const response = await axios.post('/data/post.json', {
-                    title: formData.get('title'),
-                    content: formData.get('content'),
-                    scheduledDate, // Passar a data de agendamento capturada
-                    creationDate: currentDate(new Date) // Passar a data e hora atuais
-                });
-                console.log(response.data);
-                alert('Post salvo com sucesso!');
-                form.reset();
-            } catch (error) {
-                console.error('Erro ao salvar o post:', error);
-                alert('Erro ao salvar o post. Verifique o console para mais detalhes.');
-            }
-        });
+            // Capturando a data e hora de agendamento
+            const scheduledDate = new Date(form.elements['datetimelocal'].value);
+            form.elements['scheduledDate'].value = scheduledDate.toISOString();
 
-        // Definir a data e hora atuais como valor padrão para o campo de data de criação
-        creationDateInput.value = new Date().toISOString().slice(0, 16);
+            // Enviando para o servidor
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/data/post.json', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        console.log(xhr.responseText);
+                        alert('Post salvo com sucesso!');
+                        form.reset();
+                    } else {
+                        console.error('Erro ao salvar o post:', xhr.statusText);
+                        alert('Erro ao salvar o post. Verifique o console para mais detalhes.');
+                    }
+                }
+            };
+
+            xhr.send(JSON.stringify(Object.fromEntries(new FormData(form))));
+        }
     </script>
 </body>
 </html>
