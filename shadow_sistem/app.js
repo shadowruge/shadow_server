@@ -11,6 +11,7 @@ const produtosFilePath = path.join(__dirname, 'data', 'produtos.json');
 const cobrancasFilePath = path.join(__dirname, 'data', 'cobrancas.json');
 const postsFilePath = path.join(__dirname, 'data', 'post.json'); // Caminho para o novo arquivo JSON para os posts
 const publicPath = path.join(__dirname, 'public');
+const kanbanFilePath = path.join(__dirname, 'data', 'kanban.json');
 
 // Verifica se o diretório para os arquivos JSON existe, se não, cria-o
 fs.mkdirSync(path.join(__dirname, 'data'), { recursive: true });
@@ -54,6 +55,10 @@ app.get('/agenda.html', (req, res) => {
 
 app.get('/viewagenda.html', (req, res) => {
     res.sendFile(path.join(publicPath, 'viewagenda.html'));
+});
+
+app.get('/kanban.html', (req, res) => {
+    res.sendFile(path.join(publicPath, 'kanban.html'));
 });
 
 // Rota para visualizar o arquivo JSON de cobranças
@@ -243,6 +248,49 @@ app.post('/data/post.json', (req, res) => {
             console.error(error);
             return res.status(500).send('Erro ao analisar o JSON de posts');
         }
+    });
+});
+
+// Rota GET para obter os dados do kanban
+app.get('/data/kanban.json', (req, res) => {
+    fs.readFile(kanbanFilePath, 'utf8', (err, data) => {
+        if (err) {
+            console.error('Erro ao ler o arquivo JSON do Kanban:', err);
+            return res.status(500).send('Erro ao ler o arquivo JSON do Kanban');
+        }
+        res.json(JSON.parse(data));
+    });
+});
+
+// Rota para adicionar uma nova tarefa
+app.post('/data/kanban.js', (req, res) => {
+    // Aqui você pode adicionar lógica para processar a criação de uma nova tarefa
+    const newTask = req.body.task; // Supondo que o corpo da requisição contenha os dados da nova tarefa
+
+    // Agora você precisa atualizar os dados do Kanban com a nova tarefa
+    fs.readFile(kanbanFilePath, 'utf8', (err, data) => {
+        if (err) {
+            console.error('Erro ao ler o arquivo JSON do Kanban:', err);
+            return res.status(500).send('Erro ao ler o arquivo JSON do Kanban');
+        }
+
+        // Parse dos dados do Kanban
+        const kanbanData = JSON.parse(data);
+
+        // Aqui você pode adicionar a lógica para determinar em qual coluna adicionar a nova tarefa
+        // Suponha que você queira adicionar a nova tarefa na coluna 'todo'
+        kanbanData.columns.todo.push(newTask);
+
+        // Agora você precisa salvar os dados atualizados do Kanban de volta no arquivo kanban.json
+        fs.writeFile(kanbanFilePath, JSON.stringify(kanbanData, null, 2), 'utf8', (err) => {
+            if (err) {
+                console.error('Erro ao salvar o arquivo JSON do Kanban:', err);
+                return res.status(500).send('Erro ao salvar o arquivo JSON do Kanban');
+            }
+
+            // Se tudo correr bem, envie uma resposta de sucesso
+            res.status(200).send('Nova tarefa adicionada com sucesso');
+        });
     });
 });
 

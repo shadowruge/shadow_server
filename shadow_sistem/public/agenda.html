@@ -45,15 +45,17 @@
     <script>
         function salvarPost() {
             const form = document.getElementById('postForm');
-
+            
             // Capturando a data e hora de criação
             const createdDate = new Date();
             form.elements['createdDate'].value = createdDate.toISOString();
-
+            
             // Capturando a data e hora de agendamento
             const scheduledDate = new Date(form.elements['datetimelocal'].value);
             form.elements['scheduledDate'].value = scheduledDate.toISOString();
-
+            
+        
+           
             // Enviando para o servidor
             const xhr = new XMLHttpRequest();
             xhr.open('POST', '/data/post.json', true);
@@ -73,6 +75,7 @@
             };
 
             xhr.send(JSON.stringify(Object.fromEntries(new FormData(form))));
+            
         }
     </script>
 </body>

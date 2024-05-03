@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kanban Board</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    .board {
+        display: flex;
+    }
+    .column {
+        flex: 1;
+        margin: 0 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+    }
+    .column h2 {
+        text-align: center;
+    }
+    .task {
+        margin: 0 0 10px 0;
+        padding: 10px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+
+<div class="board">
+    <div class="column" id="backlog" ondrop="drop(event, 'backlog')" ondragover="allowDrop(event)">
+        <h2>Backlog</h2>
+        <div class="tasks"></div>
+        <div>
+            <input type="text" id="taskTitle" placeholder="Enter task title">
+            <button onclick="addTask()">Add Task</button>
+        </div>
+    </div>
+
+    <div class="column" id="todo" ondrop="drop(event, 'todo')" ondragover="allowDrop(event)">
+        <h2>Todo</h2>
+        <div class="tasks"></div>
+        <div>
+            
+            
+        </div>
+    </div>
+    <div class="column" id="inProgress" ondrop="drop(event, 'inProgress')" ondragover="allowDrop(event)">
+        <h2>In Progress</h2>
+        <div class="tasks"></div>
+    </div>
+
+    <div class="column" id="reView" ondrop="drop(event, 'reView')" ondragover="allowDrop(event)">
+        <h2>Review</h2>
+        <div class="tasks"></div>
+    </div>
+    <div class="column" id="done" ondrop="drop(event, 'done')" ondragover="allowDrop(event)">
+        <h2>Done</h2>
+        <div class="tasks"></div>
+    </div>
+</div>
+
+<script>
+    // Data for tasks
+    let tasks = [];
+
+    // Function to render tasks
+    function renderTasks() {
+        const columns = document.querySelectorAll('.column');
+        columns.forEach(column => {
+            const columnId = column.id;
+            const tasksInColumn = tasks.filter(task => task.status === columnId);
+            const taskList = column.querySelector('.tasks');
+            taskList.innerHTML = ''; // Clear existing tasks
+            tasksInColumn.forEach(task => {
+                const taskElement = document.createElement('div');
+                taskElement.classList.add('task');
+                taskElement.setAttribute('draggable', 'true');
+                taskElement.dataset.id = task.id;
+                taskElement.innerText = task.title;
+                taskElement.addEventListener('dragstart', drag);
+                taskList.appendChild(taskElement);
+            });
+        });
+    }
+
+    // Drag and Drop functions
+    function allowDrop(event) {
+        event.preventDefault();
+    }
+
+    function drag(event) {
+        event.dataTransfer.setData("text", event.target.dataset.id);
+    }
+
+    function drop(event, columnId) {
+        event.preventDefault();
+        const dropZone = event.target.closest('.column');
+        dropZone.classList.remove('kanban__dropzone--active');
+        const itemId = Number(event.dataTransfer.getData('text'));
+        const taskElement = document.querySelector(`.task[data-id="${itemId}"]`);
+        if (!taskElement) return;
+
+        const taskStatus = taskElement.closest('.column').id;
+        if (taskStatus === columnId) return;
+
+        const targetColumn = document.getElementById(columnId);
+        targetColumn.querySelector('.tasks').appendChild(taskElement);
+        updateTaskStatus(itemId, columnId);
+    }
+
+    // Update task status to a specific column
+    function updateTaskStatus(taskId, newStatus) {
+        let task = tasks.find(task => task.id === taskId);
+        task.status = newStatus;
+    }
+
+    // Function to add a new task
+    function addTask() {
+        let taskTitleInput = document.getElementById("taskTitle");
+        let title = taskTitleInput.value.trim();
+        if (title !== "") {
+            let newTask = {
+                id: tasks.length + 1,
+                title: title,
+                status: "backlog"
+            };
+            tasks.push(newTask);
+            renderTasks(); // Render tasks after adding a new one
+            taskTitleInput.value = "";
+        }
+    }
+
+    // Initialize the board
+    renderTasks();
+
+    // Função para salvar os dados do Kanban no localStorage
+function saveKanbanDataToLocal(taskId) {
+    localStorage.setItem('taskId', JSON.stringify(taskId));
+    console.log(  renderTasks())
+
+}
+
+// Função para carregar os dados do Kanban do localStorage
+function loadKanbanDataFromLocal() {
+    const data = localStorage.getItem('taskId');
+    return data ? JSON.parse(data) : null;
+    console.log(  renderTasks())
+
+}
+
+</script>
+
+</body>
+</html>

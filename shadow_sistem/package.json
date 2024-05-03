@@ -4,7 +4,7 @@
   "description": "controle de vendas e estoque com pdv",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node shadow_sistem/app.js"
   },
   "author": "shadowruge",
   "license": "MIT",
