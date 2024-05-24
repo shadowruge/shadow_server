@@ -12,7 +12,7 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f8f9fa;
-            margin: 0;
+            margin: 10px;
             padding: 0;
         }
 
@@ -55,9 +55,8 @@
 </head>
 <body>
     <h1>Criar Cobrança</h1>
-   
     <ul>
-        <li><a href="/cadastroclientes.html">Cadastro de clientes</a></li>
+        <li><a href="/">Home</a></li>
         <li><a href="/viewclientes.html">Clientes</a></li>
         <li><a href="/cadastroprodutos.html">Cadastro de produtos</a></li>
         <li><a href="/viewprodutos.html">Produtos</a></li>
@@ -66,39 +65,36 @@
         <li><a href="/viewagenda.html">Visualizar agenda</a></li>
     </ul>
 
-
-
-
     <form id="formCobranca" action="/data/cobrancas.json" method="POST">
         <label for="cliente">Cliente:</label><br>
-        <select id="cliente" name="cliente">
+        <select id="cliente" name="cliente" required>
             <!-- Opções de clientes serão preenchidas dinamicamente via JavaScript -->
         </select><br>
         <label for="valor">Valor:</label><br>
-        <input type="number" id="valor" name="valor"><br>
+        <input type="number" id="valor" name="valor" required><br>
         <label for="dataVencimento">Data de Vencimento:</label><br>
-        <input type="date" id="dataVencimento" name="dataVencimento"><br><br>
+        <input type="date" id="dataVencimento" name="dataVencimento" required><br><br>
         <button type="submit">Criar Cobrança</button>
     </form>
-
+    
     <script>
-      // Fazendo uma requisição para obter os dados dos clientes
-fetch('/data/clientes.json')
-.then(response => response.json())
-.then(data => {
-    // Preenchendo as opções do seletor de clientes
-    const clienteSelect = document.getElementById('cliente');
-    data.forEach(cliente => {
-        const option = document.createElement('option');
-        option.value = cliente.fristname; // Definindo o valor como o ID do cliente
-        option.textContent = `${cliente.firstname} ${cliente.lastname}`; // Nome completo do cliente
-        clienteSelect.appendChild(option);
-    });
-})
-.catch(error => {
-    console.error('Erro ao carregar os dados dos clientes:', error);
-});
+        // Fazendo uma requisição para obter os dados dos clientes
+        fetch('/data/clientes.json')
+        .then(response => response.json())
+        .then(data => {
+            // Preenchendo as opções do seletor de clientes
+            const clienteSelect = document.getElementById('cliente');
+            data.forEach(cliente => {
+                const option = document.createElement('option');
+                option.value = cliente.firstname; // Definindo o valor como o firstname do cliente
+                option.textContent = `${cliente.firstname}: ${cliente.id}`; // Nome e ID do cliente
+                clienteSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Erro ao carregar os dados dos clientes:', error);
+        });
+    </script>    
 
-    </script>
 </body>
 </html>

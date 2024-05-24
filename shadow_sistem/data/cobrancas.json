@@ -1,50 +1,8 @@
 [
-  {
-    "id": 1,
-    "cliente": "1",
-    "valor": "200",
-    "dataVencimento": "2024-04-30"
-  },
-  {
-    "id": 2,
-    "cliente": "1",
-    "valor": "200",
-    "dataVencimento": "2024-04-30"
-  },
-  {
+    {
     "id": 3,
-    "cliente": "1",
-    "valor": "200",
-    "dataVencimento": "2024-04-30"
-  },
-  {
-    "id": 4,
-    "cliente": "1",
-    "valor": "200",
-    "dataVencimento": "2024-04-30"
-  },
-  {
-    "id": 5,
-    "cliente": "1",
-    "valor": "200",
-    "dataVencimento": "2024-04-30"
-  },
-  {
-    "id": 6,
-    "cliente": "1",
-    "valor": "200",
-    "dataVencimento": "2024-04-30"
-  },
-  {
-    "id": 7,
-    "cliente": "2",
-    "valor": "200",
-    "dataVencimento": "2024-04-30"
-  },
-  {
-    "id": 8,
-    "cliente": "2",
-    "valor": "150",
-    "dataVencimento": "2024-04-23"
+    "cliente": "João",
+    "valor": "60",
+    "dataVencimento": "2024-05-10"
   }
 ]

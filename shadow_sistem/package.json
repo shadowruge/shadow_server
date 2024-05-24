@@ -2,7 +2,7 @@
   "name": "shadow_sistem",
   "version": "1.0.0",
   "description": "controle de vendas e estoque com pdv",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
